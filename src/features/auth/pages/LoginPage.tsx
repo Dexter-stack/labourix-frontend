@@ -15,17 +15,12 @@ const schema = z.object({
 })
 type FormData = z.infer<typeof schema>
 
-const DEMO_ACCOUNTS = [
-  { role: 'Employer', email: 'james@acmeconstruction.co.uk', color: 'oklch(0.74 0.14 185)' },
-  { role: 'Worker',   email: 'danny@email.com',              color: 'oklch(0.72 0.16 145)' },
-  { role: 'Admin',    email: 'sarah@labourix.com',           color: 'oklch(0.72 0.15 280)' },
-]
 
 export default function LoginPage() {
   const login = useLogin()
   const { isDark, toggle } = useTheme()
   const [bannerError, setBannerError] = useState('')
-  const { register, handleSubmit, setValue, setError, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, setError, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
   })
 
@@ -127,35 +122,6 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          {/* Demo accounts */}
-          <div className="mt-6">
-            <div className="mb-3 flex items-center gap-2">
-              <div className="h-px flex-1 bg-[var(--border)]" />
-              <span className="font-mono text-[10px] text-[var(--text3)]">DEMO ACCOUNTS</span>
-              <div className="h-px flex-1 bg-[var(--border)]" />
-            </div>
-            <div className="flex flex-col gap-2">
-              {DEMO_ACCOUNTS.map((acc) => (
-                <button
-                  key={acc.role}
-                  type="button"
-                  onClick={() => { setValue('email', acc.email); setValue('password', 'demo1234') }}
-                  className="flex items-center gap-3 rounded-lg border border-[var(--border)] bg-[var(--surface2)] px-3 py-2 text-left transition-colors hover:border-[var(--border2)]"
-                >
-                  <div
-                    className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-[9px] font-bold"
-                    style={{ background: `color-mix(in oklch, ${acc.color} 20%, transparent)`, color: acc.color }}
-                  >
-                    {acc.role[0]}
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-[12px] font-medium text-[var(--text)]">{acc.role}</div>
-                    <div className="font-mono text-[10px] text-[var(--text3)]">{acc.email}</div>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
         </div>
 
         <p className="mt-5 text-center text-[12px] text-[var(--text3)]">
