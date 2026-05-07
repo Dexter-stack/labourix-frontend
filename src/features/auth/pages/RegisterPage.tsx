@@ -58,13 +58,50 @@ const industries = [
   { value: 'civil_engineering', label: 'Civil Engineering' },
 ]
 
-const ROLE_CONFIG = {
-  employer: { accent: 'oklch(0.74 0.14 185)', label: "I'm hiring" },
-  worker:   { accent: 'oklch(0.72 0.16 145)', label: "I'm a worker" },
+const STEP_LABELS = ['Your role', 'Your details', 'Set password']
+
+function StepIndicator({ current }: { current: number }) {
+  return (
+    <div className="mb-6 flex items-center justify-center gap-0">
+      {STEP_LABELS.map((label, i) => {
+        const step = i + 1
+        const done = step < current
+        const active = step === current
+        return (
+          <div key={step} className="flex items-center">
+            <div className="flex flex-col items-center gap-1">
+              <div
+                className={`flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-bold transition-colors ${
+                  done
+                    ? 'bg-[var(--accent)] text-white'
+                    : active
+                    ? 'border-2 border-[var(--accent)] text-[var(--accent)]'
+                    : 'border-2 border-[var(--border2)] text-[var(--text3)]'
+                }`}
+              >
+                {done ? (
+                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : step}
+              </div>
+              <span className={`text-[10px] whitespace-nowrap ${active ? 'text-[var(--accent)] font-medium' : 'text-[var(--text3)]'}`}>
+                {label}
+              </span>
+            </div>
+            {i < STEP_LABELS.length - 1 && (
+              <div className={`mb-4 mx-2 h-px w-10 ${done ? 'bg-[var(--accent)]' : 'bg-[var(--border2)]'}`} />
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
 }
 
 export default function RegisterPage() {
   const [role, setRole] = useState<'employer' | 'worker'>('employer')
+  const [step, setStep] = useState(1)
   const registerEmployer = useRegisterEmployer()
   const registerWorker = useRegisterWorker()
   const { isDark, toggle } = useTheme()
@@ -72,7 +109,51 @@ export default function RegisterPage() {
   const employerForm = useForm<EmployerForm>({ resolver: zodResolver(employerSchema) })
   const workerForm = useForm<WorkerForm>({ resolver: zodResolver(workerSchema) })
 
-  const accent = ROLE_CONFIG[role].accent
+  const isPending = role === 'employer' ? registerEmployer.isPending : registerWorker.isPending
+
+  const handleNext = async () => {
+    let valid = false
+    if (step === 1) {
+      valid = role === 'employer'
+        ? await employerForm.trigger(['name', 'email'])
+        : await workerForm.trigger(['name', 'email'])
+    } else if (step === 2) {
+      valid = role === 'employer'
+        ? await employerForm.trigger(['companyName'])
+        : await workerForm.trigger(['tradeCategory', 'location'])
+    }
+    if (valid) setStep((s) => s + 1)
+  }
+
+  const handleSubmitEmployer = employerForm.handleSubmit((data) =>
+    registerEmployer.mutate(data, {
+      onError: (error) => {
+        const { errors } = parseApiError(error)
+        if (errors) {
+          Object.entries(errors).forEach(([field, msgs]) =>
+            employerForm.setError(field as keyof EmployerForm, { message: msgs[0] })
+          )
+          if (errors.name || errors.email) setStep(1)
+          else if (errors.companyName || errors.industry) setStep(2)
+        }
+      },
+    })
+  )
+
+  const handleSubmitWorker = workerForm.handleSubmit((data) =>
+    registerWorker.mutate(data, {
+      onError: (error) => {
+        const { errors } = parseApiError(error)
+        if (errors) {
+          Object.entries(errors).forEach(([field, msgs]) =>
+            workerForm.setError(field as keyof WorkerForm, { message: msgs[0] })
+          )
+          if (errors.name || errors.email) setStep(1)
+          else if (errors.tradeCategory || errors.location) setStep(2)
+        }
+      },
+    })
+  )
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-[var(--bg)] px-4 py-10">
@@ -98,13 +179,13 @@ export default function RegisterPage() {
         {/* Logo */}
         <div className="mb-8 flex flex-col items-center gap-3">
           <div
-            className="flex h-12 w-12 items-center justify-center rounded-xl"
-            style={{ background: accent, boxShadow: `0 0 28px color-mix(in oklch, ${accent} 40%, transparent)` }}
+            className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--accent)]"
+            style={{ boxShadow: `0 0 28px var(--accent-dim)` }}
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <path d="M12 2L2 7l10 5 10-5-10-5z" fill="#0a1a18" opacity="0.9"/>
-              <path d="M2 17l10 5 10-5" stroke="#0a1a18" strokeWidth="2.5" strokeLinecap="round"/>
-              <path d="M2 12l10 5 10-5" stroke="#0a1a18" strokeWidth="2.5" strokeLinecap="round"/>
+              <path d="M12 2L2 7l10 5 10-5-10-5z" fill="white" opacity="0.9"/>
+              <path d="M2 17l10 5 10-5" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+              <path d="M2 12l10 5 10-5" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
             </svg>
           </div>
           <div className="text-center">
@@ -115,83 +196,118 @@ export default function RegisterPage() {
 
         {/* Card */}
         <div className="rounded-2xl border border-[var(--border2)] bg-[var(--surface)] p-8 shadow-[0_24px_60px_rgba(0,0,0,0.4)]">
-          <p className="mb-5 text-[13px] text-[var(--text2)]">Create your account</p>
+          <StepIndicator current={step} />
 
-          {/* Role toggle */}
-          <div className="mb-6 flex gap-1.5 rounded-xl border border-[var(--border)] bg-[var(--surface2)] p-1">
-            {(['employer', 'worker'] as const).map((r) => (
-              <button
-                key={r}
-                type="button"
-                onClick={() => setRole(r)}
-                className="flex-1 rounded-lg py-2 text-[12px] font-medium transition-all"
-                style={role === r ? {
-                  background: `color-mix(in oklch, ${ROLE_CONFIG[r].accent} 18%, transparent)`,
-                  color: ROLE_CONFIG[r].accent,
-                  borderWidth: 1,
-                  borderStyle: 'solid',
-                  borderColor: `color-mix(in oklch, ${ROLE_CONFIG[r].accent} 28%, transparent)`,
-                } : { color: 'var(--text3)' }}
-              >
-                {ROLE_CONFIG[r].label}
-              </button>
-            ))}
-          </div>
+          {/* ── Step 1: Role + Identity ── */}
+          {step === 1 && (
+            <div className="space-y-4">
+              {/* Role toggle */}
+              <div className="flex gap-1.5 rounded-xl border border-[var(--border)] bg-[var(--surface2)] p-1">
+                {(['employer', 'worker'] as const).map((r) => (
+                  <button
+                    key={r}
+                    type="button"
+                    onClick={() => setRole(r)}
+                    className={`flex-1 rounded-lg py-2 text-[12px] font-medium transition-all ${
+                      role === r
+                        ? 'bg-[var(--accent)] text-white'
+                        : 'text-[var(--text3)] hover:text-[var(--text2)]'
+                    }`}
+                  >
+                    {r === 'employer' ? "I'm hiring" : "I'm a worker"}
+                  </button>
+                ))}
+              </div>
 
-          {role === 'employer' ? (
-            <form
-              onSubmit={employerForm.handleSubmit((data) =>
-                registerEmployer.mutate(data, {
-                  onError: (error) => {
-                    const { errors } = parseApiError(error)
-                    if (errors) {
-                      Object.entries(errors).forEach(([field, msgs]) =>
-                        employerForm.setError(field as keyof EmployerForm, { message: msgs[0] })
-                      )
-                    }
-                  },
-                })
+              {role === 'employer' ? (
+                <>
+                  <Input label="Full name" placeholder="John Smith" error={employerForm.formState.errors.name?.message} {...employerForm.register('name')} />
+                  <Input label="Email address" type="email" placeholder="you@company.com" error={employerForm.formState.errors.email?.message} {...employerForm.register('email')} />
+                </>
+              ) : (
+                <>
+                  <Input label="Full name" placeholder="John Smith" error={workerForm.formState.errors.name?.message} {...workerForm.register('name')} />
+                  <Input label="Email address" type="email" placeholder="you@email.com" error={workerForm.formState.errors.email?.message} {...workerForm.register('email')} />
+                </>
               )}
+
+              <Button className="w-full mt-2" onClick={handleNext}>
+                Next
+                <svg className="ml-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </Button>
+            </div>
+          )}
+
+          {/* ── Step 2: Role-specific details ── */}
+          {step === 2 && (
+            <div className="space-y-4">
+              {role === 'employer' ? (
+                <>
+                  <Input label="Company name" placeholder="Acme Construction Ltd" error={employerForm.formState.errors.companyName?.message} {...employerForm.register('companyName')} />
+                  <Select label="Industry" options={industries} placeholder="Select industry" error={employerForm.formState.errors.industry?.message} {...employerForm.register('industry')} />
+                </>
+              ) : (
+                <>
+                  <Select label="Trade / skill" options={trades} placeholder="Select your trade" error={workerForm.formState.errors.tradeCategory?.message} {...workerForm.register('tradeCategory')} />
+                  <Input label="Location" placeholder="London, UK" error={workerForm.formState.errors.location?.message} {...workerForm.register('location')} />
+                </>
+              )}
+
+              <div className="flex gap-2 mt-2">
+                <Button variant="outline" className="flex-1" onClick={() => setStep(1)}>
+                  <svg className="mr-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                  </svg>
+                  Back
+                </Button>
+                <Button className="flex-1" onClick={handleNext}>
+                  Next
+                  <svg className="ml-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* ── Step 3: Password ── */}
+          {step === 3 && (
+            <form
+              onSubmit={role === 'employer' ? handleSubmitEmployer : handleSubmitWorker}
               className="space-y-4"
             >
-              <Input label="Full name" placeholder="John Smith" error={employerForm.formState.errors.name?.message} {...employerForm.register('name')} />
-              <Input label="Email address" type="email" placeholder="you@company.com" error={employerForm.formState.errors.email?.message} {...employerForm.register('email')} />
-              <Input label="Company name" placeholder="Acme Construction Ltd" error={employerForm.formState.errors.companyName?.message} {...employerForm.register('companyName')} />
-              <Select label="Industry" options={industries} placeholder="Select industry" error={employerForm.formState.errors.industry?.message} {...employerForm.register('industry')} />
-              <Input label="Password" type="password" placeholder="••••••••" error={employerForm.formState.errors.password?.message} {...employerForm.register('password')} />
-              <Input label="Confirm password" type="password" placeholder="••••••••" error={employerForm.formState.errors.passwordConfirmation?.message} {...employerForm.register('passwordConfirmation')} />
-              <Button type="submit" className="w-full mt-2" loading={registerEmployer.isPending}>Create employer account</Button>
-            </form>
-          ) : (
-            <form
-              onSubmit={workerForm.handleSubmit((data) =>
-                registerWorker.mutate(data, {
-                  onError: (error) => {
-                    const { errors } = parseApiError(error)
-                    if (errors) {
-                      Object.entries(errors).forEach(([field, msgs]) =>
-                        workerForm.setError(field as keyof WorkerForm, { message: msgs[0] })
-                      )
-                    }
-                  },
-                })
+              {role === 'employer' ? (
+                <>
+                  <Input label="Password" type="password" placeholder="••••••••" error={employerForm.formState.errors.password?.message} {...employerForm.register('password')} />
+                  <Input label="Confirm password" type="password" placeholder="••••••••" error={employerForm.formState.errors.passwordConfirmation?.message} {...employerForm.register('passwordConfirmation')} />
+                </>
+              ) : (
+                <>
+                  <Input label="Password" type="password" placeholder="••••••••" error={workerForm.formState.errors.password?.message} {...workerForm.register('password')} />
+                  <Input label="Confirm password" type="password" placeholder="••••••••" error={workerForm.formState.errors.passwordConfirmation?.message} {...workerForm.register('passwordConfirmation')} />
+                </>
               )}
-              className="space-y-4"
-            >
-              <Input label="Full name" placeholder="John Smith" error={workerForm.formState.errors.name?.message} {...workerForm.register('name')} />
-              <Input label="Email address" type="email" placeholder="you@email.com" error={workerForm.formState.errors.email?.message} {...workerForm.register('email')} />
-              <Select label="Trade / skill" options={trades} placeholder="Select your trade" error={workerForm.formState.errors.tradeCategory?.message} {...workerForm.register('tradeCategory')} />
-              <Input label="Location" placeholder="London, UK" error={workerForm.formState.errors.location?.message} {...workerForm.register('location')} />
-              <Input label="Password" type="password" placeholder="••••••••" error={workerForm.formState.errors.password?.message} {...workerForm.register('password')} />
-              <Input label="Confirm password" type="password" placeholder="••••••••" error={workerForm.formState.errors.passwordConfirmation?.message} {...workerForm.register('passwordConfirmation')} />
-              <Button type="submit" className="w-full mt-2" loading={registerWorker.isPending}>Create worker account</Button>
+
+              <div className="flex gap-2 mt-2">
+                <Button type="button" variant="outline" className="flex-1" onClick={() => setStep(2)}>
+                  <svg className="mr-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                  </svg>
+                  Back
+                </Button>
+                <Button type="submit" className="flex-1" loading={isPending}>
+                  Create account
+                </Button>
+              </div>
             </form>
           )}
         </div>
 
         <p className="mt-5 text-center text-[12px] text-[var(--text3)]">
           Already have an account?{' '}
-          <Link to="/login" className="text-[oklch(0.74_0.14_185)] hover:underline">
+          <Link to="/login" className="text-[var(--accent)] hover:underline">
             Sign in
           </Link>
         </p>
