@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+﻿import { Link } from 'react-router-dom'
 import Card from '@/components/ui/Card'
 import Badge from '@/components/ui/Badge'
 import JobStatusBadge from './JobStatusBadge'
@@ -18,7 +18,7 @@ export default function JobCard({ job, actions }: JobCardProps) {
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 flex-wrap">
-            <Link to={`/jobs/${job.id}`} className="text-base font-semibold text-[var(--text)] hover:text-[oklch(0.74_0.14_185)] truncate">
+            <Link to={`/jobs/${job.id}`} className="text-base font-semibold text-[var(--text)] hover:text-[var(--accent)] truncate">
               {job.title}
             </Link>
             <JobStatusBadge status={job.status} />

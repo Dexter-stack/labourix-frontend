@@ -1,10 +1,10 @@
-import { useNotificationStore } from '@/stores/notificationStore'
+﻿import { useNotificationStore } from '@/stores/notificationStore'
 
 const config = {
   success: { color: 'oklch(0.72 0.16 145)', label: '✓' },
   error:   { color: 'oklch(0.65 0.2 25)',   label: '✕' },
   warning: { color: 'oklch(0.78 0.15 72)',   label: '!' },
-  info:    { color: 'oklch(0.74 0.14 185)',  label: 'i' },
+  info:    { color: 'var(--accent)',  label: 'i' },
 }
 
 export default function NotificationToast() {

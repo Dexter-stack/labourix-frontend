@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+﻿import { useQuery } from '@tanstack/react-query'
 import PageWrapper from '@/components/layout/PageWrapper'
 import StatCard from '@/components/ui/StatCard'
 import Card, { CardHeader, CardTitle } from '@/components/ui/Card'
@@ -107,7 +107,7 @@ export default function AdminAnalyticsPage() {
           <div className="space-y-3">
             {[
               { label: 'Draft', value: stats?.jobs.draft ?? 0, color: 'bg-[var(--surface2)]' },
-              { label: 'Active', value: stats?.jobs.active ?? 0, color: 'bg-[oklch(0.74_0.14_185)]' },
+              { label: 'Active', value: stats?.jobs.active ?? 0, color: 'bg-[var(--accent)]' },
               { label: 'Filled', value: stats?.jobs.filled ?? 0, color: 'bg-[oklch(0.72_0.16_145)]' },
               { label: 'Cancelled', value: stats?.jobs.cancelled ?? 0, color: 'bg-[oklch(0.65_0.2_25)]' },
             ].map(({ label, value, color }) => {
@@ -133,7 +133,7 @@ export default function AdminAnalyticsPage() {
           <div className="space-y-3">
             {[
               { label: 'Pending', value: stats?.bookings.pending ?? 0, color: 'bg-[oklch(0.78_0.15_72)]' },
-              { label: 'Confirmed', value: stats?.bookings.confirmed ?? 0, color: 'bg-[oklch(0.74_0.14_185)]' },
+              { label: 'Confirmed', value: stats?.bookings.confirmed ?? 0, color: 'bg-[var(--accent)]' },
               { label: 'Completed', value: stats?.bookings.completed ?? 0, color: 'bg-[oklch(0.72_0.16_145)]' },
               { label: 'Cancelled', value: stats?.bookings.cancelled ?? 0, color: 'bg-[oklch(0.65_0.2_25)]' },
             ].map(({ label, value, color }) => {

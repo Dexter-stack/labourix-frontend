@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
+﻿import { Link, useNavigate } from 'react-router-dom'
 import PageWrapper from '@/components/layout/PageWrapper'
 import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
@@ -82,8 +82,8 @@ export default function EmployerDashboard() {
             value={stats?.bookings.confirmed ?? 0}
             sub={`${stats?.bookings.pending ?? 0} pending`}
             iconPath="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
-            iconBg="oklch(0.74 0.14 185 / 0.12)"
-            iconColor="oklch(0.74 0.14 185)"
+            iconBg="oklch(0.65 0.16 28 / 0.12)"
+            iconColor="var(--accent)"
           />
           <StatTile
             title="Workers Hired"

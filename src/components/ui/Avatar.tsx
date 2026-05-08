@@ -1,4 +1,4 @@
-import { cn } from '@/utils/cn'
+﻿import { cn } from '@/utils/cn'
 
 interface AvatarProps {
   name: string
@@ -26,7 +26,7 @@ export default function Avatar({ name, src, size = 'md', className }: AvatarProp
   return (
     <div className={cn(
       'flex items-center justify-center rounded-full border border-[rgba(255,255,255,0.1)]',
-      'bg-[oklch(0.74_0.14_185_/_0.12)] text-[oklch(0.74_0.14_185)] font-semibold font-sans',
+      'bg-[oklch(0.65_0.16_28_/_0.12)] text-[var(--accent)] font-semibold font-sans',
       sizes[size],
       className
     )}>

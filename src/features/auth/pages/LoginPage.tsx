@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -57,7 +57,7 @@ export default function LoginPage() {
         <div className="mb-8 flex flex-col items-center gap-3">
           <div
             className="flex h-12 w-12 items-center justify-center rounded-xl"
-            style={{ background: 'oklch(0.74 0.14 185)', boxShadow: '0 0 28px oklch(0.74 0.14 185 / 0.4)' }}
+            style={{ background: 'var(--accent)', boxShadow: '0 0 28px oklch(0.65 0.16 28 / 0.4)' }}
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
               <path d="M12 2L2 7l10 5 10-5-10-5z" fill="#0a1a18" opacity="0.9"/>
@@ -112,7 +112,7 @@ export default function LoginPage() {
                 {...register('password')}
               />
               <div className="mt-1 text-right">
-                <Link to="/forgot-password" className="text-[11px] text-[var(--text3)] hover:text-[oklch(0.74_0.14_185)] transition-colors">
+                <Link to="/forgot-password" className="text-[11px] text-[var(--text3)] hover:text-[var(--accent)] transition-colors">
                   Forgot password?
                 </Link>
               </div>
@@ -126,7 +126,7 @@ export default function LoginPage() {
 
         <p className="mt-5 text-center text-[12px] text-[var(--text3)]">
           Don't have an account?{' '}
-          <Link to="/register" className="text-[oklch(0.74_0.14_185)] hover:underline">
+          <Link to="/register" className="text-[var(--accent)] hover:underline">
             Sign up
           </Link>
         </p>

@@ -1,4 +1,4 @@
-import { cn } from '@/utils/cn'
+﻿import { cn } from '@/utils/cn'
 
 interface BadgeProps {
   children: React.ReactNode
@@ -7,7 +7,7 @@ interface BadgeProps {
 }
 
 const variants = {
-  teal:    'bg-[oklch(0.74_0.14_185_/_0.15)] text-[oklch(0.74_0.14_185)] border-[oklch(0.74_0.14_185_/_0.2)]',
+  teal:    'bg-[oklch(0.65_0.16_28_/_0.15)] text-[var(--accent)] border-[oklch(0.65_0.16_28_/_0.2)]',
   green:   'bg-[oklch(0.72_0.16_145_/_0.15)] text-[oklch(0.72_0.16_145)] border-[oklch(0.72_0.16_145_/_0.2)]',
   purple:  'bg-[oklch(0.72_0.15_280_/_0.15)] text-[oklch(0.72_0.15_280)] border-[oklch(0.72_0.15_280_/_0.2)]',
   amber:   'bg-[oklch(0.78_0.15_72_/_0.15)]  text-[oklch(0.78_0.15_72)]  border-[oklch(0.78_0.15_72_/_0.2)]',

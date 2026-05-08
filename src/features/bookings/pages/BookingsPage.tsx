@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import PageWrapper from '@/components/layout/PageWrapper'
 import Card from '@/components/ui/Card'
 import Badge from '@/components/ui/Badge'
@@ -59,7 +59,7 @@ export default function BookingsPage() {
           <button
             key={t.value}
             onClick={() => setTab(t.value)}
-            className={`shrink-0 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${tab === t.value ? 'bg-[oklch(0.74_0.14_185)] text-white' : 'text-[var(--text2)] hover:bg-[var(--surface2)]'}`}
+            className={`shrink-0 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${tab === t.value ? 'bg-[var(--accent)] text-white' : 'text-[var(--text2)] hover:bg-[var(--surface2)]'}`}
           >
             {t.label}
           </button>

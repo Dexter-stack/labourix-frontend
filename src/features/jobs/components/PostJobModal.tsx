@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+﻿import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -199,7 +199,7 @@ export default function PostJobModal({ open, onClose, job }: PostJobModalProps) 
               onChange={(e) => setSkillInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addSkill(skillInput) } }}
               placeholder="Type a skill and press Enter"
-              className="flex-1 rounded-lg border border-[var(--border2)] bg-[var(--input-bg)] px-3 py-2 text-[13px] text-[var(--text)] focus:border-[oklch(0.74_0.14_185)] focus:outline-none focus:ring-2 focus:ring-[oklch(0.74_0.14_185_/_0.15)]"
+              className="flex-1 rounded-lg border border-[var(--border2)] bg-[var(--input-bg)] px-3 py-2 text-[13px] text-[var(--text)] focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[oklch(0.65_0.16_28_/_0.15)]"
             />
             <Button type="button" variant="outline" size="sm" onClick={() => addSkill(skillInput)}>Add</Button>
           </div>
@@ -209,7 +209,7 @@ export default function PostJobModal({ open, onClose, job }: PostJobModalProps) 
                 key={s}
                 type="button"
                 onClick={() => addSkill(s)}
-                className="rounded-full border border-[var(--border)] px-2.5 py-1 text-xs text-[var(--text2)] hover:border-[oklch(0.74_0.14_185)] hover:text-[oklch(0.74_0.14_185)] transition-colors"
+                className="rounded-full border border-[var(--border)] px-2.5 py-1 text-xs text-[var(--text2)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors"
               >
                 + {s}
               </button>
@@ -240,8 +240,8 @@ export default function PostJobModal({ open, onClose, job }: PostJobModalProps) 
                 onClick={() => toggleCert(cert)}
                 className={`rounded-full border px-2.5 py-1 text-xs transition-colors ${
                   certs.includes(cert)
-                    ? 'border-[oklch(0.74_0.14_185)] bg-[oklch(0.74_0.14_185_/_0.12)] text-[oklch(0.74_0.14_185)]'
-                    : 'border-[var(--border)] text-[var(--text2)] hover:border-[oklch(0.74_0.14_185)] hover:text-[oklch(0.74_0.14_185)]'
+                    ? 'border-[var(--accent)] bg-[oklch(0.65_0.16_28_/_0.12)] text-[var(--accent)]'
+                    : 'border-[var(--border)] text-[var(--text2)] hover:border-[var(--accent)] hover:text-[var(--accent)]'
                 }`}
               >
                 {certs.includes(cert) ? '✓ ' : '+ '}{cert}

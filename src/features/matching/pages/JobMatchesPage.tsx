@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import PageWrapper from '@/components/layout/PageWrapper'
 import Card from '@/components/ui/Card'
@@ -53,7 +53,7 @@ export default function JobMatchesPage() {
           <span className="text-2xl">🤖</span>
           <div>
             <p className="text-sm font-semibold text-[var(--text)]">How AI matching works</p>
-            <p className="text-xs text-[oklch(0.74_0.14_185)] mt-0.5">
+            <p className="text-xs text-[var(--accent)] mt-0.5">
               Workers are scored on: <strong>Skill match (40%)</strong> · <strong>Proximity (20%)</strong> · <strong>Availability (20%)</strong> · <strong>Rating/Performance (20%)</strong>
             </p>
           </div>
@@ -72,7 +72,7 @@ export default function JobMatchesPage() {
                 <div className="relative">
                   <Avatar name={match.worker.name} src={match.worker.avatar} size="lg" />
                   {index === 0 && (
-                    <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[oklch(0.74_0.14_185)] text-white text-xs font-bold">
+                    <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--accent)] text-white text-xs font-bold">
                       #1
                     </span>
                   )}

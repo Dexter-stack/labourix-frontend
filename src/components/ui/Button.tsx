@@ -1,4 +1,4 @@
-import { forwardRef } from 'react'
+﻿import { forwardRef } from 'react'
 import { cn } from '@/utils/cn'
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -8,8 +8,8 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variants = {
-  primary: 'bg-[oklch(0.74_0.14_185)] text-[#0a1a18] font-bold hover:opacity-90 border-0',
-  outline: 'bg-[oklch(0.74_0.14_185_/_0.1)] border border-[oklch(0.74_0.14_185_/_0.25)] text-[oklch(0.74_0.14_185)] font-semibold hover:bg-[oklch(0.74_0.14_185_/_0.18)]',
+  primary: 'bg-[var(--accent)] text-[#0a1a18] font-bold hover:opacity-90 border-0',
+  outline: 'bg-[oklch(0.65_0.16_28_/_0.1)] border border-[oklch(0.65_0.16_28_/_0.25)] text-[var(--accent)] font-semibold hover:bg-[oklch(0.65_0.16_28_/_0.18)]',
   ghost:   'bg-transparent border border-[var(--border2)] text-[var(--text2)] hover:border-[var(--border2)] hover:text-[var(--text)]',
   danger:  'bg-[oklch(0.65_0.2_25_/_0.12)] border border-[oklch(0.65_0.2_25_/_0.25)] text-[oklch(0.65_0.2_25)] font-semibold hover:bg-[oklch(0.65_0.2_25_/_0.2)]',
   amber:   'bg-[oklch(0.78_0.15_72_/_0.12)] border border-[oklch(0.78_0.15_72_/_0.25)] text-[oklch(0.78_0.15_72)] font-semibold hover:bg-[oklch(0.78_0.15_72_/_0.2)]',

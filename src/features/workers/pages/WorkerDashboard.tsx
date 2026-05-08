@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+﻿import { Link } from 'react-router-dom'
 import PageWrapper from '@/components/layout/PageWrapper'
 import StatCard from '@/components/ui/StatCard'
 import Card, { CardHeader, CardTitle } from '@/components/ui/Card'
@@ -43,7 +43,7 @@ export default function WorkerDashboard() {
         <Card>
           <CardHeader>
             <CardTitle>Upcoming Bookings</CardTitle>
-            <Link to="/worker/bookings" className="text-sm text-[oklch(0.74_0.14_185)]">View all →</Link>
+            <Link to="/worker/bookings" className="text-sm text-[var(--accent)]">View all →</Link>
           </CardHeader>
           {bookings?.data.length === 0 ? (
             <p className="py-4 text-center text-sm text-[var(--text3)]">No upcoming bookings.</p>
@@ -68,7 +68,7 @@ export default function WorkerDashboard() {
         <Card>
           <CardHeader>
             <CardTitle>New Job Opportunities</CardTitle>
-            <Link to="/worker/jobs" className="text-sm text-[oklch(0.74_0.14_185)]">Browse all →</Link>
+            <Link to="/worker/jobs" className="text-sm text-[var(--accent)]">Browse all →</Link>
           </CardHeader>
           {jobsLoading ? (
             <PageSpinner />

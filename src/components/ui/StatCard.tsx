@@ -1,4 +1,4 @@
-import Card from './Card'
+﻿import Card from './Card'
 import { cn } from '@/utils/cn'
 
 interface StatCardProps {
@@ -11,7 +11,7 @@ interface StatCardProps {
   className?: string
 }
 
-export default function StatCard({ title, value, sub, trend, icon, color = 'oklch(0.74 0.14 185)', className }: StatCardProps) {
+export default function StatCard({ title, value, sub, trend, icon, color = 'var(--accent)', className }: StatCardProps) {
   return (
     <Card className={cn('flex flex-col gap-3', className)}>
       <div className="flex items-center justify-between">

@@ -1,4 +1,4 @@
-import { useParams, Link, useNavigate } from 'react-router-dom'
+﻿import { useParams, Link, useNavigate } from 'react-router-dom'
 import PageWrapper from '@/components/layout/PageWrapper'
 import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
@@ -103,10 +103,10 @@ export default function JobDetailPage() {
             <Link to={`/jobs/${job.id}/matches`} className="block">
               <Card className="cursor-pointer hover:bg-[var(--surface2)] transition-colors">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[oklch(0.74_0.14_185)] text-[#0a1a18] text-lg font-bold">AI</div>
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--accent)] text-[#0a1a18] text-lg font-bold">AI</div>
                   <div>
                     <p className="text-sm font-semibold text-[var(--text)]">AI Worker Matching</p>
-                    <p className="text-xs text-[oklch(0.74_0.14_185)]">See ranked worker recommendations</p>
+                    <p className="text-xs text-[var(--accent)]">See ranked worker recommendations</p>
                   </div>
                 </div>
               </Card>

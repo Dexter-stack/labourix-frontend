@@ -1,4 +1,4 @@
-import { forwardRef } from 'react'
+﻿import { forwardRef } from 'react'
 import { cn } from '@/utils/cn'
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -28,7 +28,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             'focus:outline-none focus:ring-2 focus:ring-offset-0',
             error
               ? 'border-[oklch(0.65_0.2_25_/_0.4)] focus:border-[oklch(0.65_0.2_25)] focus:ring-[oklch(0.65_0.2_25_/_0.25)]'
-              : 'border-[var(--input-border)] focus:border-[oklch(0.74_0.14_185_/_0.5)] focus:ring-[oklch(0.74_0.14_185_/_0.15)]',
+              : 'border-[var(--input-border)] focus:border-[oklch(0.65_0.16_28_/_0.5)] focus:ring-[oklch(0.65_0.16_28_/_0.15)]',
             className
           )}
           {...props}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -88,8 +88,8 @@ export default function WorkerProfilePage() {
   return (
     <PageWrapper title="My Profile" subtitle="Update your skills and availability">
       {isNewAccount && (
-        <div className="mb-6 flex items-start gap-3 rounded-xl border border-[oklch(0.74_0.14_185_/_0.3)] bg-[oklch(0.74_0.14_185_/_0.08)] px-4 py-4">
-          <svg className="mt-0.5 h-5 w-5 shrink-0 text-[oklch(0.74_0.14_185)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <div className="mb-6 flex items-start gap-3 rounded-xl border border-[oklch(0.65_0.16_28_/_0.3)] bg-[oklch(0.65_0.16_28_/_0.08)] px-4 py-4">
+          <svg className="mt-0.5 h-5 w-5 shrink-0 text-[var(--accent)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
           <div>
@@ -182,7 +182,7 @@ export default function WorkerProfilePage() {
                     onChange={(e) => setSkillInput(e.target.value)}
                     onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addSkill(skillInput) } }}
                     placeholder="Type a skill and press Enter"
-                    className="flex-1 rounded-lg border border-[var(--border2)] bg-[var(--input-bg)] px-3 py-2 text-[13px] text-[var(--text)] focus:border-[oklch(0.74_0.14_185)] focus:outline-none focus:ring-2 focus:ring-[oklch(0.74_0.14_185_/_0.15)]"
+                    className="flex-1 rounded-lg border border-[var(--border2)] bg-[var(--input-bg)] px-3 py-2 text-[13px] text-[var(--text)] focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[oklch(0.65_0.16_28_/_0.15)]"
                   />
                   <Button type="button" variant="outline" size="sm" onClick={() => addSkill(skillInput)}>Add</Button>
                 </div>
@@ -192,7 +192,7 @@ export default function WorkerProfilePage() {
                       key={s}
                       type="button"
                       onClick={() => addSkill(s)}
-                      className="rounded-full border border-[var(--border)] px-2.5 py-1 text-xs text-[var(--text2)] hover:border-[oklch(0.74_0.14_185)] hover:text-[oklch(0.74_0.14_185)] transition-colors"
+                      className="rounded-full border border-[var(--border)] px-2.5 py-1 text-xs text-[var(--text2)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors"
                     >
                       + {s}
                     </button>

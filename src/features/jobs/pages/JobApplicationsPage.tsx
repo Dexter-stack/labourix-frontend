@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+﻿import { useState, useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import PageWrapper from '@/components/layout/PageWrapper'
 import Card from '@/components/ui/Card'
@@ -203,7 +203,7 @@ export default function JobApplicationsPage() {
               onClick={() => setActiveTab(t.value)}
               className={`shrink-0 flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                 activeTab === t.value
-                  ? 'bg-[oklch(0.74_0.14_185)] text-white'
+                  ? 'bg-[var(--accent)] text-white'
                   : 'text-[var(--text2)] hover:bg-[var(--surface2)]'
               }`}
             >

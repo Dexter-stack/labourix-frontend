@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -35,7 +35,7 @@ function Logo() {
     <div className="mb-8 flex flex-col items-center gap-3">
       <div
         className="flex h-12 w-12 items-center justify-center rounded-xl"
-        style={{ background: 'oklch(0.74 0.14 185)', boxShadow: '0 0 28px oklch(0.74 0.14 185 / 0.4)' }}
+        style={{ background: 'var(--accent)', boxShadow: '0 0 28px oklch(0.65 0.16 28 / 0.4)' }}
       >
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
           <path d="M12 2L2 7l10 5 10-5-10-5z" fill="#0a1a18" opacity="0.9"/>
@@ -65,7 +65,7 @@ function StepIndicator({ current }: { current: 1 | 2 | 3 }) {
               <div
                 className="flex h-5 w-5 items-center justify-center rounded-full font-mono text-[10px] font-bold transition-colors"
                 style={{
-                  background: done || active ? 'oklch(0.74 0.14 185)' : 'var(--surface2)',
+                  background: done || active ? 'var(--accent)' : 'var(--surface2)',
                   color: done || active ? '#0a1a18' : 'var(--text3)',
                 }}
               >
@@ -73,7 +73,7 @@ function StepIndicator({ current }: { current: 1 | 2 | 3 }) {
               </div>
               <span
                 className="text-[11px] font-medium"
-                style={{ color: active ? 'var(--text)' : done ? 'oklch(0.74 0.14 185)' : 'var(--text3)' }}
+                style={{ color: active ? 'var(--text)' : done ? 'var(--accent)' : 'var(--text3)' }}
               >
                 {label}
               </span>
@@ -81,7 +81,7 @@ function StepIndicator({ current }: { current: 1 | 2 | 3 }) {
             {i < steps.length - 1 && (
               <div
                 className="h-px w-6 transition-colors"
-                style={{ background: done ? 'oklch(0.74 0.14 185)' : 'var(--border)' }}
+                style={{ background: done ? 'var(--accent)' : 'var(--border)' }}
               />
             )}
           </div>
@@ -236,7 +236,7 @@ export default function ForgotPasswordPage() {
         </div>
 
         <p className="mt-5 text-center text-[12px] text-[var(--text3)]">
-          <Link to="/login" className="text-[oklch(0.74_0.14_185)] hover:underline">
+          <Link to="/login" className="text-[var(--accent)] hover:underline">
             Back to sign in
           </Link>
         </p>
