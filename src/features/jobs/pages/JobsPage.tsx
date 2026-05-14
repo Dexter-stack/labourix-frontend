@@ -64,7 +64,7 @@ export default function JobsPage() {
           action={{ label: 'Post a job', onClick: () => navigate('/jobs/new') }}
         />
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-3 pb-8">
           {data?.data.map((job) => (
             <JobCard
               key={job.id}
