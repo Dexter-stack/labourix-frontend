@@ -11,7 +11,7 @@ export default function AppShell() {
   useEcho()
 
   return (
-    <div className="flex h-screen bg-[var(--bg)]">
+    <div className="flex h-dvh bg-[var(--bg)]">
       {/* Mobile backdrop */}
       {sidebarOpen && (
         <div
