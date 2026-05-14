@@ -87,10 +87,27 @@ export async function fetchJobApplications(
   return { ...data, data: data.data.map(normalizeJobApplication) }
 }
 
-export async function fetchWorkforceOptimisation(): Promise<{
-  recommendations: Array<{ type: string; message: string; impact: 'high' | 'medium' | 'low'; workerId?: string }>
-  utilizationByTrade: Array<{ trade: string; rate: number }>
-}> {
+export interface WorkforceRecommendation {
+  type: string
+  priority: 'high' | 'medium' | 'low'
+  title: string
+  description: string
+}
+
+export interface TradeUtilisation {
+  trade: string
+  workersNeeded: number
+  workersBooked: number
+  utilisationRate: number
+  avgHourlyRate: string
+}
+
+export interface WorkforceOptimisationData {
+  recommendations: WorkforceRecommendation[]
+  utilisationByTrade: TradeUtilisation[]
+}
+
+export async function fetchWorkforceOptimisation(): Promise<WorkforceOptimisationData> {
   const { data } = await api.get('/employer/workforce-optimisation')
   return data.data
 }

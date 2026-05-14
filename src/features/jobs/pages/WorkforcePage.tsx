@@ -4,7 +4,15 @@ import Badge from '@/components/ui/Badge'
 import { PageSpinner } from '@/components/ui/Spinner'
 import { useWorkforceOptimisation } from '../hooks/useEmployerStats'
 
-const impactVariant = { high: 'danger', medium: 'amber', low: 'gray' } as const
+const priorityVariant = { high: 'danger', medium: 'amber', low: 'gray' } as const
+const priorityDot = { high: 'bg-red-500', medium: 'bg-amber-500', low: 'bg-gray-400' } as const
+
+const typeIcon: Record<string, string> = {
+  coverage_gap: '⚠️',
+  pending_action: '📋',
+  overstaffed: '👥',
+  rate_anomaly: '💰',
+}
 
 export default function WorkforcePage() {
   const { data, isLoading } = useWorkforceOptimisation()
@@ -18,55 +26,82 @@ export default function WorkforcePage() {
         <PageSpinner />
       ) : (
         <div className="grid gap-6 lg:grid-cols-2">
-          <div className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Optimisation Recommendations</CardTitle>
-                <Badge variant="teal">{data?.recommendations.length ?? 0} insights</Badge>
-              </CardHeader>
-              {data?.recommendations.length === 0 ? (
-                <p className="py-4 text-center text-sm text-[var(--text3)]">Your workforce is well optimised. Check back later for new insights.</p>
-              ) : (
-                <ul className="space-y-3">
-                  {data?.recommendations.map((rec, i) => (
-                    <li key={i} className="flex items-start gap-3 rounded-lg border border-[var(--border)] bg-[var(--surface2)] p-3">
-                      <div className={`mt-0.5 h-2 w-2 shrink-0 rounded-full ${rec.impact === 'high' ? 'bg-red-500' : rec.impact === 'medium' ? 'bg-amber-500' : 'bg-gray-400'}`} />
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs font-medium text-[var(--text3)] uppercase tracking-wide">{rec.type.replace('_', ' ')}</span>
-                          <Badge variant={impactVariant[rec.impact]}>{rec.impact} impact</Badge>
-                        </div>
-                        <p className="mt-1 text-sm text-[var(--text)]">{rec.message}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </Card>
-          </div>
+          {/* Recommendations */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Optimisation Recommendations</CardTitle>
+              <Badge variant={data?.recommendations.length ? 'danger' : 'green'}>
+                {data?.recommendations.length ?? 0} insights
+              </Badge>
+            </CardHeader>
 
+            {!data?.recommendations.length ? (
+              <p className="py-6 text-center text-sm text-[var(--text3)]">
+                Your workforce is well optimised. Check back later for new insights.
+              </p>
+            ) : (
+              <ul className="space-y-3">
+                {data.recommendations.map((rec, i) => (
+                  <li
+                    key={i}
+                    className="flex items-start gap-3 rounded-lg border border-[var(--border)] bg-[var(--surface2)] p-3"
+                  >
+                    <div className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${priorityDot[rec.priority]}`} />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap mb-1">
+                        <span className="text-xs font-medium text-[var(--text3)] uppercase tracking-wide">
+                          {typeIcon[rec.type] ?? '🔍'} {rec.type.replace(/_/g, ' ')}
+                        </span>
+                        <Badge variant={priorityVariant[rec.priority]}>{rec.priority} priority</Badge>
+                      </div>
+                      <p className="text-sm font-semibold text-[var(--text)]">{rec.title}</p>
+                      <p className="mt-0.5 text-xs text-[var(--text2)] leading-relaxed">{rec.description}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Card>
+
+          {/* Utilisation by Trade */}
           <Card>
             <CardHeader>
               <CardTitle>Utilisation by Trade</CardTitle>
             </CardHeader>
-            <div className="space-y-3">
-              {data?.utilizationByTrade.map((item) => (
-                <div key={item.trade}>
-                  <div className="mb-1 flex items-center justify-between text-sm">
-                    <span className="font-medium text-[var(--text)]">{item.trade}</span>
-                    <span className={`font-semibold ${item.rate >= 80 ? 'text-green-600' : item.rate >= 50 ? 'text-amber-600' : 'text-red-600'}`}>
-                      {item.rate}%
-                    </span>
-                  </div>
-                  <div className="h-2 w-full rounded-full bg-[var(--surface2)]">
-                    <div
-                      className={`h-2 rounded-full ${item.rate >= 80 ? 'bg-green-500' : item.rate >= 50 ? 'bg-amber-500' : 'bg-red-500'}`}
-                      style={{ width: `${item.rate}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
+
+            {!data?.utilisationByTrade.length ? (
+              <p className="py-6 text-center text-sm text-[var(--text3)]">No active trade data yet.</p>
+            ) : (
+              <div className="space-y-5">
+                {data.utilisationByTrade.map((item) => {
+                  const rate = item.utilisationRate
+                  const barColor =
+                    rate >= 80 ? 'bg-green-500' : rate >= 50 ? 'bg-amber-500' : 'bg-red-500'
+                  const rateColor =
+                    rate >= 80 ? 'text-green-500' : rate >= 50 ? 'text-amber-500' : 'text-red-500'
+                  return (
+                    <div key={item.trade}>
+                      <div className="mb-1.5 flex items-center justify-between">
+                        <span className="text-sm font-semibold text-[var(--text)]">{item.trade}</span>
+                        <span className={`text-sm font-bold tabular-nums ${rateColor}`}>
+                          {rate.toFixed(1)}%
+                        </span>
+                      </div>
+                      <div className="h-2 w-full rounded-full bg-[var(--surface2)]">
+                        <div
+                          className={`h-2 rounded-full transition-all ${barColor}`}
+                          style={{ width: `${Math.min(rate, 100)}%` }}
+                        />
+                      </div>
+                      <div className="mt-1.5 flex items-center justify-between text-xs text-[var(--text3)]">
+                        <span>{item.workersBooked} of {item.workersNeeded} workers filled</span>
+                        <span>avg £{parseFloat(item.avgHourlyRate).toFixed(2)}/hr</span>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
           </Card>
         </div>
       )}
