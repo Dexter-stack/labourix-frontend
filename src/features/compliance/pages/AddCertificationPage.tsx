@@ -6,8 +6,10 @@ import { z } from 'zod'
 import PageWrapper from '@/components/layout/PageWrapper'
 import Card from '@/components/ui/Card'
 import Input from '@/components/ui/Input'
+import Select from '@/components/ui/Select'
 import Button from '@/components/ui/Button'
 import { useUploadCertification } from '../hooks/useCertifications'
+import { useCertificationBodies } from '@/features/reference/hooks/useCertificationBodies'
 
 const schema = z.object({
   name: z.string().min(2, 'Certification name required'),
@@ -23,6 +25,12 @@ export default function AddCertificationPage() {
   const navigate = useNavigate()
   const fileRef = useRef<HTMLInputElement>(null)
   const uploadCert = useUploadCertification()
+  const { data: bodies } = useCertificationBodies()
+
+  const bodyOptions = bodies?.map((b) => ({
+    value: b.name,
+    label: b.abbreviation ? `${b.abbreviation} — ${b.name}` : b.name,
+  })) ?? []
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -59,9 +67,10 @@ export default function AddCertificationPage() {
               {...register('name')}
             />
             <div className="grid grid-cols-2 gap-4">
-              <Input
+              <Select
                 label="Issuing body"
-                placeholder="e.g. CITB, JIB"
+                options={bodyOptions}
+                placeholder={bodies ? 'Select body' : 'Loading...'}
                 error={errors.issuingBody?.message}
                 {...register('issuingBody')}
               />

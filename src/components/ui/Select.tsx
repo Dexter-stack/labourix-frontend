@@ -1,15 +1,19 @@
 ﻿import { forwardRef } from 'react'
 import { cn } from '@/utils/cn'
 
+interface SelectOption { value: string; label: string }
+interface SelectGroup { label: string; options: SelectOption[] }
+
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label?: string
   error?: string
-  options: { value: string; label: string }[]
+  options?: SelectOption[]
+  groups?: SelectGroup[]
   placeholder?: string
 }
 
 const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className, label, error, options, placeholder, id, ...props }, ref) => {
+  ({ className, label, error, options, groups, placeholder, id, ...props }, ref) => {
     const selectId = id ?? label?.toLowerCase().replace(/\s+/g, '-')
 
     return (
@@ -34,9 +38,18 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           {...props}
         >
           {placeholder && <option value="">{placeholder}</option>}
-          {options.map((opt) => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
-          ))}
+          {groups
+            ? groups.map((g) => (
+                <optgroup key={g.label} label={g.label}>
+                  {g.options.map((opt) => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </optgroup>
+              ))
+            : options?.map((opt) => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))
+          }
         </select>
         {error && <p className="text-[11px] text-[oklch(0.65_0.2_25)]">{error}</p>}
       </div>

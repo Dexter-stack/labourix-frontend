@@ -13,17 +13,8 @@ import Badge from '@/components/ui/Badge'
 import { PageSpinner } from '@/components/ui/Spinner'
 import { useJob, useCreateJob, useUpdateJob } from '../hooks/useJobs'
 import { parseApiError } from '@/utils/apiError'
-
-const TRADES = [
-  'Electrician', 'Plumber', 'Carpenter', 'Bricklayer', 'Roofer',
-  'HVAC Technician', 'Scaffolder', 'Painter', 'Plasterer', 'General Labour',
-  'Welder', 'Pipefitter', 'Tiler', 'Glazier', 'Steelworker',
-]
-
-const COMMON_SKILLS = [
-  'Wiring', 'Plumbing', 'Joinery', 'Brickwork', 'Roofing',
-  'HVAC', 'Scaffolding', 'Painting', 'Plastering', 'Inspection', 'Health & Safety',
-]
+import { useTrades } from '@/features/reference/hooks/useTrades'
+import { getSkillsForTrade } from '@/features/reference/tradeSkills'
 
 const COMMON_CERTS = ['CSCS Card', 'IPAF', 'PASMA', 'Gas Safe', 'ECS Card', 'SMSTS', 'SSSTS', 'First Aid']
 
@@ -49,16 +40,20 @@ export default function PostJobPage() {
   const createJob = useCreateJob()
   const updateJob = useUpdateJob()
   const isPending = isEdit ? updateJob.isPending : createJob.isPending
+  const { data: tradesData } = useTrades()
 
   const [skills, setSkills] = useState<string[]>([])
   const [skillInput, setSkillInput] = useState('')
   const [certs, setCerts] = useState<string[]>([])
   const formRef = useRef<HTMLFormElement>(null)
 
-  const { register, handleSubmit, reset, setError, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, reset, setError, watch, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: { workersNeeded: 1 },
   })
+
+  const selectedTrade = watch('trade')
+  const suggestedSkills = getSkillsForTrade(selectedTrade ?? '').filter((s) => !skills.includes(s))
 
   useEffect(() => {
     if (existingJob) {
@@ -117,10 +112,22 @@ export default function PostJobPage() {
 
   if (isEdit && jobLoading) return <PageSpinner />
 
-  const tradeOptions = [...TRADES]
-  if (existingJob?.trade && !TRADES.includes(existingJob.trade)) {
-    tradeOptions.unshift(existingJob.trade)
-  }
+  const tradeGroups = tradesData
+    ? [
+        {
+          label: 'Construction & Building',
+          options: tradesData
+            .filter((t) => t.category === 'construction_building')
+            .map((t) => ({ value: t.name, label: t.name })),
+        },
+        {
+          label: 'Engineering & Technical',
+          options: tradesData
+            .filter((t) => t.category === 'engineering_technical')
+            .map((t) => ({ value: t.name, label: t.name })),
+        },
+      ]
+    : undefined
 
   return (
     <PageWrapper
@@ -149,8 +156,9 @@ export default function PostJobPage() {
               />
               <Select
                 label="Trade"
-                options={tradeOptions.map((t) => ({ value: t, label: t }))}
-                placeholder="Select trade"
+                groups={tradeGroups}
+                options={[]}
+                placeholder={tradesData ? 'Select trade' : 'Loading...'}
                 error={errors.trade?.message}
                 {...register('trade')}
               />
@@ -224,18 +232,22 @@ export default function PostJobPage() {
             />
             <Button type="button" variant="outline" size="sm" onClick={() => addSkill(skillInput)}>Add</Button>
           </div>
-          <div className="mt-3 flex flex-wrap gap-1.5">
-            {COMMON_SKILLS.map((s) => (
-              <button
-                key={s}
-                type="button"
-                onClick={() => addSkill(s)}
-                className="rounded-full border border-[var(--border)] px-2.5 py-1 text-xs text-[var(--text2)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors"
-              >
-                + {s}
-              </button>
-            ))}
-          </div>
+          {suggestedSkills.length > 0 ? (
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              {suggestedSkills.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => addSkill(s)}
+                  className="rounded-full border border-[var(--border)] px-2.5 py-1 text-xs text-[var(--text2)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors"
+                >
+                  + {s}
+                </button>
+              ))}
+            </div>
+          ) : !selectedTrade ? (
+            <p className="mt-2 text-xs text-[var(--text3)]">Select a trade above to see suggested skills.</p>
+          ) : null}
           {skills.length > 0 && (
             <div className="mt-3 flex flex-wrap gap-1.5">
               {skills.map((s) => (

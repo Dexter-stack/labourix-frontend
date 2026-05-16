@@ -9,6 +9,7 @@ import Select from '@/components/ui/Select'
 import { useRegisterEmployer, useRegisterWorker } from '../hooks/useRegister'
 import { useTheme } from '@/hooks/useTheme'
 import { parseApiError } from '@/utils/apiError'
+import { useTrades } from '@/features/reference/hooks/useTrades'
 
 const employerSchema = z.object({
   name: z.string().min(2, 'Full name required'),
@@ -36,19 +37,6 @@ const workerSchema = z.object({
 
 type EmployerForm = z.infer<typeof employerSchema>
 type WorkerForm = z.infer<typeof workerSchema>
-
-const trades = [
-  { value: 'electrician', label: 'Electrician' },
-  { value: 'plumber', label: 'Plumber' },
-  { value: 'carpenter', label: 'Carpenter' },
-  { value: 'plasterer', label: 'Plasterer' },
-  { value: 'painter', label: 'Painter & Decorator' },
-  { value: 'bricklayer', label: 'Bricklayer' },
-  { value: 'roofer', label: 'Roofer' },
-  { value: 'hvac', label: 'HVAC Engineer' },
-  { value: 'scaffolder', label: 'Scaffolder' },
-  { value: 'general_labourer', label: 'General Labourer' },
-]
 
 const industries = [
   { value: 'construction', label: 'Construction' },
@@ -105,6 +93,24 @@ export default function RegisterPage() {
   const registerEmployer = useRegisterEmployer()
   const registerWorker = useRegisterWorker()
   const { isDark, toggle } = useTheme()
+  const { data: tradesData } = useTrades()
+
+  const tradeGroups = tradesData
+    ? [
+        {
+          label: 'Construction & Building',
+          options: tradesData
+            .filter((t) => t.category === 'construction_building')
+            .map((t) => ({ value: t.name, label: t.name })),
+        },
+        {
+          label: 'Engineering & Technical',
+          options: tradesData
+            .filter((t) => t.category === 'engineering_technical')
+            .map((t) => ({ value: t.name, label: t.name })),
+        },
+      ]
+    : undefined
 
   const employerForm = useForm<EmployerForm>({ resolver: zodResolver(employerSchema) })
   const workerForm = useForm<WorkerForm>({ resolver: zodResolver(workerSchema) })
@@ -250,7 +256,7 @@ export default function RegisterPage() {
                 </>
               ) : (
                 <>
-                  <Select label="Trade / skill" options={trades} placeholder="Select your trade" error={workerForm.formState.errors.tradeCategory?.message} {...workerForm.register('tradeCategory')} />
+                  <Select label="Trade / skill" groups={tradeGroups} options={[]} placeholder={tradesData ? 'Select your trade' : 'Loading trades...'} error={workerForm.formState.errors.tradeCategory?.message} {...workerForm.register('tradeCategory')} />
                   <Input label="Location" placeholder="London, UK" error={workerForm.formState.errors.location?.message} {...workerForm.register('location')} />
                 </>
               )}
